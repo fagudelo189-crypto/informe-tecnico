@@ -1,0 +1,15 @@
+{
+  "name": "Informe Técnico 2026",
+  "short_name": "informeTEC",
+  "description": "Informe técnico interactivo: diseño de red, monitoreo, seguridad y tendencias.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1017",
+  "theme_color": "#0b1017",
+  "lang": "es",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

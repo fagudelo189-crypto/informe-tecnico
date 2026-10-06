@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Técnico 2026 · Redes, Monitoreo, Seguridad y Tendencias</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b1017">
+<style>
+:root{
+  --bg:#0b1017; --bg2:#0f1620; --bg3:#141d29;
+  --line:#26313f; --line2:#33404f;
+  --txt:#e6edf3; --muted:#9fb0c1;
+  --cyan:#22d3ee; --blue:#3b82f6; --green:#34d399; --amber:#fbbf24; --red:#f87171; --violet:#a78bfa;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  background:
+    radial-gradient(1000px 500px at 85% -10%, rgba(34,211,238,.12), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(59,130,246,.12), transparent 55%),
+    var(--bg);
+  color:var(--txt); line-height:1.6;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,16,23,.82);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.site-header .wrap{display:flex;align-items:center;gap:18px;height:60px}
+.brand{font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.brand span{color:var(--cyan)}
+.net{font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--line2);white-space:nowrap;color:var(--muted)}
+.net.on{color:var(--green);border-color:rgba(52,211,153,.5)}
+.net.off{color:var(--amber);border-color:rgba(251,191,36,.5)}
+nav{display:flex;gap:4px;overflow-x:auto;margin-left:auto}
+nav a{
+  color:var(--muted);text-decoration:none;font-size:.82rem;padding:7px 11px;border-radius:8px;
+  border:1px solid transparent;white-space:nowrap;transition:.2s;
+}
+nav a:hover{color:var(--txt);background:var(--bg3)}
+nav a.active{color:var(--cyan);border-color:var(--line2);background:var(--bg3)}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 40px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--line2);padding:6px 14px;border-radius:999px;background:var(--bg2)}
+.hero h1{font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;font-size:clamp(1.8rem,4vw,3rem);line-height:1.15;margin:20px 0 14px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:720px;margin:0 auto 28px;font-size:1.02rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;max-width:860px;margin:0 auto}
+.kpi{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 12px}
+.kpi b{display:block;font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;font-size:1.6rem;color:var(--cyan)}
+.kpi b.g{color:var(--green)} .kpi b.a{color:var(--amber)} .kpi b.v{color:var(--violet)}
+.kpi span{font-size:.78rem;color:var(--muted)}
+
+/* ---------- sections / generic ---------- */
+.section{padding:52px 0}
+.section + .section{border-top:1px solid var(--line)}
+.section__kicker{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.section__title{font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;font-size:clamp(1.3rem,2.6vw,1.9rem);margin-bottom:12px}
+.section__lead{color:var(--muted);max-width:780px;margin-bottom:26px}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h4{font-size:.95rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card p{font-size:.86rem;color:var(--muted)}
+.card .tag{display:inline-block;font-size:.68rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);margin:0 4px 2px 0}
+.tag.c{color:var(--cyan);border-color:rgba(34,211,238,.45)}
+.tag.g{color:var(--green);border-color:rgba(52,211,153,.45)}
+.tag.a{color:var(--amber);border-color:rgba(251,191,36,.45)}
+.tag.r{color:var(--red);border-color:rgba(248,113,113,.45)}
+.tag.v{color:var(--violet);border-color:rgba(167,139,250,.45)}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--line2);padding:8px 10px}
+td{border-bottom:1px solid var(--line);padding:9px 10px;color:var(--txt)}
+td.mut{color:var(--muted)}
+code{background:var(--bg3);border:1px solid var(--line2);padding:1px 6px;border-radius:6px;font-size:.8em;color:var(--cyan)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,var(--cyan),var(--blue));color:#04121b;font-weight:700;font-size:.86rem;border:0;border-radius:10px;padding:10px 18px;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--bg3);color:var(--txt);border:1px solid var(--line2);font-weight:500}
+
+/* ---------- red / svg ---------- */
+.topo-box{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px;overflow-x:auto}
+.topo-box svg{width:100%;height:auto;min-width:640px;display:block}
+.flow{fill:none;stroke:var(--green);stroke-width:1.6;opacity:.85;stroke-dasharray:6 6;animation:dash 1.1s linear infinite}
+.flow.o{stroke:var(--amber)}
+.flow.v{stroke:var(--violet)}
+@keyframes dash{to{stroke-dashoffset:-12}}
+.linkline{stroke:var(--line2);stroke-width:1.4}
+.node{cursor:pointer}
+.node .shape{transition:.2s}
+.node:hover .shape{filter:drop-shadow(0 0 6px rgba(34,211,238,.7))}
+.node.sel .shape{stroke:var(--cyan);stroke-width:2.4}
+.node text{fill:var(--txt);font-size:11px;pointer-events:none;font-family:"Segoe UI",system-ui,sans-serif}
+.node .shape.cloud{fill:#152238;stroke:var(--blue)}
+.node .shape.fw{fill:#241722;stroke:var(--red)}
+.node .shape.sw{fill:#122a31;stroke:var(--cyan)}
+.node .shape.rt{fill:#10263d;stroke:var(--blue)}
+.node .shape.srv{fill:#1a2530;stroke:var(--violet)}
+.node .shape.leaf{fill:#10301f;stroke:var(--green);rx:8}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:.74rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#topoInfo{border:1px solid var(--line2);border-radius:12px;background:var(--bg3);padding:14px 16px;margin-top:14px;min-height:84px}
+#topoInfo b{color:var(--cyan)}
+
+/* ---------- monitoreo ---------- */
+.dash{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+@media(max-width:860px){.dash{grid-template-columns:1fr}}
+
+/* ---------- móvil ---------- */
+@media(max-width:720px){
+  .site-header .wrap{height:52px;gap:8px}
+  .net{display:none}
+  nav a{padding:6px 8px;font-size:.72rem}
+  .hero{padding:42px 0 26px}
+  .hero h1{font-size:1.5rem}
+  .section{padding:38px 0}
+  .topo-box{-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+  .node{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .layer{flex-wrap:wrap}
+  .layer b{flex:1 1 100%}
+  table{font-size:.74rem}
+  .road li{padding-left:20px}
+  .footer-actions .btn{width:100%;justify-content:center}
+}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.metric{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:12px}
+.metric span{font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between}
+.metric b{font-family:"Space Grotesk","Segoe UI",system-ui,sans-serif;font-size:1.35rem;color:var(--cyan)}
+.metric b.g{color:var(--green)} .metric b.a{color:var(--amber)} .metric b.r{color:var(--red)}
+canvas{width:100%;background:var(--bg3);border:1px solid var(--line);border-radius:12px}
+.alerts{list-style:none;margin-top:12px;display:grid;gap:8px}
+.alerts li{font-size:.8rem;border-left:3px solid var(--line2);padding:6px 10px;background:var(--bg3);border-radius:0 8px 8px 0}
+.alerts li.ok{border-color:var(--green)}
+
+/* ---------- seguridad ---------- */
+.layers{display:grid;gap:8px;margin-bottom:20px}
+.layer{border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);font-size:.86rem}
+.layer b{flex:0 0 40%}
+.layer span{color:var(--muted);font-size:.78rem}
+.l1{background:rgba(248,113,113,.1)} .l1 b{color:var(--red)}
+.l2{background:rgba(251,191,36,.1)} .l2 b{color:var(--amber)}
+.l3{background:rgba(34,211,238,.1)} .l3 b{color:var(--cyan)}
+.l4{background:rgba(167,139,250,.1)} .l4 b{color:var(--violet)}
+.l5{background:rgba(52,211,153,.1)} .l5 b{color:var(--green)}
+.checklist{display:grid;gap:10px}
+.item{display:flex;gap:12px;align-items:flex-start;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.2s}
+.item:hover{border-color:var(--line2)}
+.item input{display:none}
+.cbox{flex:0 0 20px;width:20px;height:20px;border-radius:6px;border:2px solid var(--line2);display:grid;place-items:center;color:#04121b;font-size:13px;font-weight:700;transition:.2s}
+.item.on .cbox{background:var(--green);border-color:var(--green)}
+.item.on p{color:var(--muted)}
+.item p b{display:block;font-size:.88rem;margin-bottom:2px}
+.item p span{font-size:.78rem}
+.progress{background:var(--bg3);border:1px solid var(--line);border-radius:999px;height:12px;overflow:hidden;margin:16px 0 6px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:999px;transition:width .4s var(--ease)}
+
+/* ---------- tendencias ---------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filters button{background:var(--bg3);border:1px solid var(--line2);color:var(--muted);font-size:.8rem;padding:7px 14px;border-radius:999px;cursor:pointer;transition:.2s}
+.filters button:hover{color:var(--txt)}
+.filters button.on{background:linear-gradient(90deg,var(--cyan),var(--blue));color:#04121b;font-weight:600}
+.trends{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.trend{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;transition:.25s}
+.trend:hover{transform:translateY(-3px);border-color:var(--line2)}
+.trend .ico{font-size:1.5rem}
+.trend h4{font-size:.95rem;margin:8px 0 6px}
+.trend p{font-size:.82rem;color:var(--muted)}
+.trend .stage{margin-top:10px;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase}
+.road{list-style:none;position:relative;margin-left:16px;display:grid;gap:16px}
+.road::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--line2)}
+.road li{position:relative;padding-left:24px}
+.road li::before{content:"";position:absolute;left:-6px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--cyan)}
+.road li::after{content:attr(data-year);position:absolute;left:0;top:0;font-family:"Space Grotesk";font-size:.72rem;color:var(--cyan);background:var(--bg2);padding:1px 6px;border:1px solid var(--line);border-radius:6px}
+.road b{display:block;margin-top:22px;font-size:.92rem}
+.road p{font-size:.82rem;color:var(--muted)}
+
+/* ---------- footer / print ---------- */
+footer{border-top:1px solid var(--line);padding:30px 0 44px;margin-top:20px}
+.footer-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+footer p{font-size:.82rem;color:var(--muted)}
+@media print{
+  .site-header,.filters,.footer-actions,.flow{display:none!important}
+  body{background:#fff;color:#111}
+  .section,.card,.kpi,.trend,.metric,.alerts li{break-inside:avoid;background:#fff}
+  .hero h1 em{-webkit-text-fill-color:currentColor}
+  a{color:#111}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">informe<span>TÉCNICO</span>.2026</div>
+    <span class="net" id="netState" title="Estado de conexión"></span>
+    <nav id="nav" aria-label="Secciones">
+      <a href="#resumen">Resumen</a>
+      <a href="#diseno">Diseño de red</a>
+      <a href="#monitoreo">Monitoreo</a>
+      <a href="#seguridad">Seguridad</a>
+      <a href="#tendencias">Tendencias</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <span class="eyebrow">Documento interno · v1.0 · 2026</span>
+      <h1>Informe técnico interactivo:<br><em>arquitectura, monitoreo, seguridad y tendencias.</em></h1>
+      <p>Análisis de la infraestructura de red del campus, el sistema de monitoreo 24/7, el modelo de defensa en profundidad y la hoja de ruta hacia tecnologías de vanguardia.</p>
+      <div class="kpis">
+        <div class="kpi"><b>4</b><span>dominios analizados</span></div>
+        <div class="kpi"><b>5</b><span>capas de seguridad</span></div>
+        <div class="kpi"><b>15</b><span>segmentos / VLANs</span></div>
+        <div class="kpi"><b>8</b><span>tendencias 2026</span></div>
+        <div class="kpi"><b class="g">99.98</b><span>% disponibilidad</span></div>
+      </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section class="section" id="resumen">
+      <p class="section__kicker">Resumen</p>
+      <h2 class="section__title">Alcance del informe</h2>
+      <p class="section__lead">El presente documento integra el estado actual de la red corporativa y las recomendaciones para modernizarla. Cada apartado es interactivo: la topología responde al clic, el panel de monitoreo es una simulación viva y las tendencias pueden filtrarse por etapa de adopción.</p>
+      <div class="grid g3">
+        <div class="card"><h4><span style="color:var(--blue)">▣</span> Diseño de red</h4><p>Topología jerárquica campus (núcleo-distribución-acceso), ampliada con perímetro protegido, segmentación por VLAN y enlace a sucursal por VPN.</p><div style="margin-top:10px"><span class="tag c">OSPF</span><span class="tag c">VLAN</span><span class="tag a">VPN S2S</span></div></div>
+        <div class="card"><h4><span style="color:var(--cyan)">◔</span> Monitoreo</h4><p>Observabilidad en tiempo real con métricas de tráfico, latencia, jitter y pérdida de paquetes, con alertas por umbral.</p><div style="margin-top:10px"><span class="tag g">SNMP</span><span class="tag g">NetFlow</span><span class="tag g">Syslog</span></div></div>
+        <div class="card"><h4><span style="color:var(--red)">▲</span> Seguridad</h4><p>Modelo de defensa en profundidad (5 capas) y plan de adopción de confianza cero (Zero Trust).</p><div style="margin-top:10px"><span class="tag r">Firewall UTM</span><span class="tag r">IDS/IPS</span><span class="tag v">Zero Trust</span></div></div>
+        <div class="card"><h4><span style="color:var(--violet)">✦</span> Tendencias</h4><p>Vigilancia tecnológica: SD-WAN/SASE, SDN, 5G/6G, redes autónomas con IA, edge, AIOps y criptografía cuántica.</p><div style="margin-top:10px"><span class="tag v">SASE</span><span class="tag v">AIOps</span><span class="tag v">QKD</span></div></div>
+        <div class="card"><h4><span style="color:var(--green)">●</span> Inversión 2026</h4><p>Presupuesto estimado por dominio. La modernización puede ejecutarse por fases sin interrumpir el servicio.</p><div style="margin-top:10px"><span class="tag g">PPP creciente</span><span class="tag g">ROI a 24 meses</span></div></div>
+        <div class="card"><h4><span style="color:var(--amber)">■</span> Riesgos</h4><p>Principales vectores identificados: IoT no segmentado, parcheo tardío y falta de visibilidad central.</p><div style="margin-top:10px"><span class="tag a">11M+ intentos</span><span class="tag a">IoT</span></div></div>
+      </div>
+    </section>
+
+    <!-- DISEÑO DE RED -->
+    <section class="section" id="diseno">
+      <p class="section__kicker">01 · Diseño de red</p>
+      <h2 class="section__title">Arquitectura de referencia</h2>
+      <p class="section__lead">Topología jerárquica de tres niveles con pares redundantes. Haz clic en cualquier nodo para ver su rol y recomendación. Las líneas animadas representan flujo normal de tráfico (verde), tránsito privilegiado a la DMZ (ámbar) y túnel VPN hacia la sucursal (violeta).</p>
+
+      <div class="grid g2">
+        <div class="topo-box">
+          <svg viewBox="0 0 820 500" role="img" aria-label="Diagrama de red jerárquico con núcleo, distribución y acceso">
+            <g id="edges"></g>
+            <g id="nodes"></g>
+          </svg>
+          <div class="legend">
+            <span><i style="background:var(--blue)"></i>Nube / ISP</span>
+            <span><i style="background:var(--red)"></i>Firewall</span>
+            <span><i style="background:var(--cyan)"></i>Switch L3</span>
+            <span><i style="background:var(--violet)"></i>Servidor</span>
+            <span><i style="background:var(--green)"></i>VLAN / acceso</span>
+            <span style="margin-left:auto"><span style="color:var(--green)">——— <code>flujo normal</code> · <span style="color:var(--amber)"><code>DMZ</code></span> · <span style="color:var(--violet)"><code>VPN</code></span></span></span>
+          </div>
+        </div>
+
+        <div>
+          <div id="topoInfo"><b>Selecciona un dispositivo</b> para cargar su ficha técnica.</div>
+          <table style="margin-top:14px">
+            <tr><th>Segmento</th><th>Red (subred)</th><th>Función</th></tr>
+            <tr><td>Gestión / Núcleo</td><td class="mut"><code>10.0.0.0/24</code></td><td>Infraestructura crítica</td></tr>
+            <tr><td>Servidores</td><td class="mut"><code>10.10.0.0/24</code></td><td>AD, ERP, SIEM</td></tr>
+            <tr><td>DMZ</td><td class="mut"><code>10.20.0.0/24</code></td><td>Web pública / correo</td></tr>
+            <tr><td>Clientes</td><td class="mut"><code>10.30.0.0/24</code></td><td>Usuarios cable</td></tr>
+            <tr><td>Invitados</td><td class="mut"><code>10.31.0.0/24</code></td><td>Acceso aislado</td></tr>
+            <tr><td>Operadores / OT</td><td class="mut"><code>10.32.0.0/24</code></td><td>Planta / producción</td></tr>
+            <tr><td>IoT / cámaras</td><td class="mut"><code>10.33.0.0/24</code></td><td>Dispositivos M2M</td></tr>
+            <tr><td>Wi-Fi</td><td class="mut"><code>10.34.0.0/24</code></td><td>APs corporativas</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONITOREO -->
+    <section class="section" id="monitoreo">
+      <p class="section__kicker">02 · Monitoreo</p>
+      <h2 class="section__title">Centro de operaciones de red (NOC)</h2>
+      <p class="section__lead">El panel inferior simula en vivo la telemetría del enlace principal (basada en SNMP + NetFlow con correlación en el SIEM). Los valores se actualizan cada segundo y las alertas se generan al cruzar umbrales.</p>
+
+      <div class="dash">
+        <div class="card">
+          <div class="metrics">
+            <div class="metric"><span>Latencia <code id="latS">&lt;24ms</code></span><b id="lat">12</b><span>ms</span></div>
+            <div class="metric"><span>Jitter</span><b id="jit">2</b><span>ms</span></div>
+            <div class="metric"><span>Pérdida</span><b id="loss">0.0</b><span>%</span></div>
+            <div class="metric"><span>Uptime</span><b id="up">99.98</b><span>%</span></div>
+          </div>
+          <canvas id="chart" height="230"></canvas>
+          <p style="font-size:.72rem;color:var(--muted);margin-top:8px"><code>Grafana + Prometheus</code> · tráfico del enlace principal (Mbps) ingestado desde <code>NetFlow/IPFIX</code>.</p>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <h4><span style="color:var(--cyan)">◔</span> Pila de telemetría</h4>
+            <ul class="alerts">
+              <li><b style="color:var(--green)">SNMPv3</b> — parámetros de hardware y puertos</li>
+              <li><b style="color:var(--cyan)">NetFlow / IPFIX</b> — análisis de flujos</li>
+              <li><b style="color:var(--amber)">Syslog</b> — correlación de eventos</li>
+              <li><b style="color:var(--violet)">ICMP / Traceroute</b> — disponibilidad extremo a extremo</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4><span style="color:var(--amber)">⚠</span> Umbrales configurados</h4>
+            <table>
+              <tr><th>Métrica</th><th>Advertencia</th><th>Crítico</th></tr>
+              <tr><td>Latencia</td><td class="mut">&gt;50 ms</td><td class="mut">&gt;100 ms</td></tr>
+              <tr><td>Jitter</td><td class="mut">&gt;10 ms</td><td class="mut">&gt;30 ms</td></tr>
+              <tr><td>Pérdida</td><td class="mut">&gt;1%</td><td class="mut">&gt;3%</td></tr>
+              <tr><td>CPU / puerto</td><td class="mut">&gt;80%</td><td class="mut">&gt;95%</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEGURIDAD -->
+    <section class="section" id="seguridad">
+      <p class="section__kicker">03 · Seguridad</p>
+      <h2 class="section__title">Defensa en profundidad y confianza cero</h2>
+      <p class="section__lead">La estrategia combina controles por capas con un modelo que asume que la red siempre está comprometida ("nunca confíes, siempre verifica"). Marca los controles implementados y observa el nivel de madurez Zero Trust.</p>
+
+      <div class="layers">
+        <div class="layer l1"><b>1 · Perímetro</b><span>Firewall UTM, IPS activo, filtrado antimalware y VPN</span></div>
+        <div class="layer l2"><b>2 · Red</b><span>Segmentación VLAN, listas de control (ACL) y OSPF con autenticación</span></div>
+        <div class="layer l3"><b>3 · Host</b><span>Fortalezas de sistema, EDR y gestión central de parches</span></div>
+        <div class="layer l4"><b>4 · Aplicación</b><span>WAF, TLS 1.3, MFA y revisión de código</span></div>
+        <div class="layer l5"><b>5 · Datos</b><span>Cifrado en reposo y tránsito, DLP y copias 3-2-1</span></div>
+      </div>
+
+      <div class="grid g2">
+        <div class="card">
+          <h4><span style="color:var(--green)">☐</span> Checklist Zero Trust</h4>
+          <div class="checklist" id="ztd">
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>Microsegmentación por identidad</b><span>Acceso otorgado por identidad y dispositivo, no por dirección IP.</span></p></label>
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>MFA en todos los accesos</b><span>Segundo factor obligatorio también en la consola de red.</span></p></label>
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>Acceso con mínimo privilegio</b><span>Roles RBAC y credenciales efímeras para administradores.</span></p></label>
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>Inspección TLS de tráfico interno</b><span>MITM controlado para detectar malware cifrado.</span></p></label>
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>Seguridad IoT / OT</b><span>Segmento propio con inspección profunda de paquetes.</span></p></label>
+            <label class="item"><input type="checkbox"><span class="cbox">✓</span><p><b>Respuesta automatizada (SOAR)</b><span>Contención automática ante incidentes repetidos.</span></p></label>
+          </div>
+          <div class="progress"><i id="ztbar"></i></div>
+          <p id="ztlabel" style="font-size:.8rem;color:var(--muted)">Madurez Zero Trust: <b id="ztpct" style="color:var(--green)">0%</b></p>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <h4><span style="color:var(--red)">▲</span> Controles clave (2026)</h4>
+            <table>
+              <tr><th>Control</th><th>Función</th><th>Estado</th></tr>
+              <tr><td>UTM perimetral</td><td class="mut">FW + IPS + VPN</td><td><span class="tag a">Mejorar</span></td></tr>
+              <tr><td>IDS/IPS</td><td class="mut">Firma + anomalias</td><td><span class="tag g">Activo</span></td></tr>
+              <tr><td>SIEM + XDR</td><td class="mut">Correlación 24/7</td><td><span class="tag g">Activo</span></td></tr>
+              <tr><td>EDR endpoints</td><td class="mut">Detección host</td><td><span class="tag g">Activo</span></td></tr>
+              <tr><td>Vulnerabilidades</td><td class="mut">Escaneo trimestral</td><td><span class="tag r">Pendiente</span></td></tr>
+            </table>
+          </div>
+          <div class="card">
+            <h4><span style="color:var(--cyan)">i</span> Recomendaciones críticas</h4>
+            <ul class="alerts">
+              <li class="ok"><b>Reducir superficie:</b> publicar la DMZ tras reverse-proxy.</li>
+              <li class="ok"><b>Parcheo:</b> ventana mensual y vulnerabilidades críticas en 7 días.</li>
+              <li class="ok"><b>Copias 3-2-1</b> y plan de restauración probado anualmente.</li>
+              <li class="ok"><b>Simulaciones de phishing</b> mensuales y formación del personal.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TENDENCIAS -->
+    <section class="section" id="tendencias">
+      <p class="section__kicker">04 · Tendencias</p>
+      <h2 class="section__title">Tecnologías de vanguardia · 2026</h2>
+      <p class="section__lead">Vigilancia tecnológica anual. Filtra por etapa de adopción estimada en el sector.</p>
+
+      <div class="filters" id="filters">
+        <button data-f="todas" class="on">Todas</button>
+        <button data-f="madura">Implementada</button>
+        <button data-f="adopcion">En adopción</button>
+        <button data-f="emergente">Emergente</button>
+      </div>
+
+      <div class="trends" id="trends">
+        <article class="trend" data-stage="madura"><span class="ico">🌐</span><h4>SD-WAN + SASE</h4><p>Tráfico enrutado por inteligencia sobre múltiples enlaces; seguridad y red convergen en el borde (Secure Access Service Edge).</p><div class="tags" style="margin-top:8px"><span class="tag v">red</span><span class="tag c">seguridad</span></div><p class="stage" style="color:var(--green)">● Implementada</p></article>
+        <article class="trend" data-stage="madura"><span class="ico">🧠</span><h4>SDN / redes definidas por software</h4><p>Plano de control centralizado que permite aprovisionar y reencaminar la red por políticas, sin tocar el hardware.</p><div style="margin-top:8px"><span class="tag c">red</span></div><p class="stage" style="color:var(--green)">● Implementada</p></article>
+        <article class="trend" data-stage="madura"><span class="ico">📶</span><h4>Wi-Fi 6/6E y 5G privado</h4><p>Espectro y <em>network slicing</em> para latencias críticas en plantas industriales y campus.</p><div style="margin-top:8px"><span class="tag g">movilidad</span></div><p class="stage" style="color:var(--green)">● Implementada</p></article>
+        <article class="trend" data-stage="adopcion"><span class="ico">⚙️</span><h4>AIOps / observabilidad</h4><p>ML aplicado a logs y métricas para anticipar fallas y reducir falsas alarmas del NOC.</p><div style="margin-top:8px"><span class="tag g">monitoreo</span></div><p class="stage" style="color:var(--amber)">◐ En adopción</p></article>
+        <article class="trend" data-stage="adopcion"><span class="ico">🛰️</span><h4>Redes satelitales LEO</h4><p>Starlink y otras constelaciones de órbita baja como backup WAN y cobertura remota.</p><div style="margin-top:8px"><span class="tag c">WAN</span></div><p class="stage" style="color:var(--amber)">◐ En adopción</p></article>
+        <article class="trend" data-stage="adopcion"><span class="ico">🟢</span><h4>Nube híbrida y edge computing</h4><p>Cómputo cerca del dato para latencias sub-milisegundo; Internet de las cosas industrial (IIoT).</p><div style="margin-top:8px"><span class="tag g">edge</span></div><p class="stage" style="color:var(--amber)">◐ En adopción</p></article>
+        <article class="trend" data-stage="emergente"><span class="ico">🤖</span><h4>Redes autónomas (IBN)</h4><p>Networking basado en intención con IA que autoconfigura, autoprovisiona y autocurará la red.</p><div style="margin-top:8px"><span class="tag c">IA</span><span class="tag v">SDN</span></div><p class="stage" style="color:var(--violet)">◇ Emergente</p></article>
+        <article class="trend" data-stage="emergente"><span class="ico">🔐</span><h4>Criptografía cuántica (QKD)</h4><p>Distribución de claves cuánticas y post-cuántica para proteger infraestructuras sensibles.</p><div style="margin-top:8px"><span class="tag r">seguridad</span></div><p class="stage" style="color:var(--violet)">◇ Emergente</p></article>
+        <article class="trend" data-stage="emergente"><span class="ico">📡</span><h4>6G e IA en el borde</h4><p>Investigación 6G (THz, superficies inteligentes) y RAN abierta (OpenRAN).</p><div style="margin-top:8px"><span class="tag g">movilidad</span></div><p class="stage" style="color:var(--violet)">◇ Emergente</p></article>
+        <article class="trend" data-stage="emergente"><span class="ico">🧪</span><h4>Gemelos digitales de red</h4><p>Replicas virtuales para simular cambios antes de aplicarlos al tráfico real.</p><div style="margin-top:8px"><span class="tag c">IA</span></div><p class="stage" style="color:var(--violet)">◇ Emergente</p></article>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <h4><span style="color:var(--amber)">→</span> Hoja de ruta sugerida</h4>
+        <ol class="road">
+          <li data-year="2026"><b>Consolidar el NOC con AIOps</b><p>Implantar detección de anomalias sobre la telemetría actual (SNMP+NetFlow).</p></li>
+          <li data-year="2026-27"><b>Migrar a SD-WAN/SASE</b><p>Sustituir el enlace único MPLS por enrutado inteligente y seguridad en el borde.</p></li>
+          <li data-year="2027"><b>Segmentar IoT con 5G privado</b><p>Contener dispositivos M2M y habilitar <em>slicing</em> para OT.</p></li>
+          <li data-year="2028"><b>Red autónoma asistida por IA</b><p>Incorporar intención de negocio en la configuración (IBN) y gemelo digital.</p></li>
+          <li data-year="2029+"><b>Preparación post-cuántica</b><p>Inventariar claves críticas y pilotar QKD en el enlace inter-campus.</p></li>
+        </ol>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-actions">
+      <button class="btn ghost" onclick="window.print()">🖨 Imprimir informe</button>
+      <button class="btn" onclick="location.hash='#resumen'">Volver al inicio ↑</button>
+    </div>
+    <p><b>Informe Técnico Interactivo 2026.</b> Documento educativo elaborado con HTML, CSS y JavaScript sin dependencias externas. Funciona también sin conexión: tras la primera visita queda disponible como PWA.</p>
+  </div>
+</footer>
+
+<script>
+/* =============== NAV / SCROLLSPY =============== */
+const nav = document.getElementById("nav");
+const links = [...nav.querySelectorAll("a")];
+const sections = links.map(a => document.querySelector(a.getAttribute("href")));
+const spy = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id)); } });
+}, { rootMargin: "-42% 0px -50% 0px" });
+sections.forEach(s => spy.observe(s));
+
+/* =============== TOPOLOGÍA =============== */
+const TOPO = {
+  wan:      { x:250, y:46,  kind:"cloud", t:"ISP / Internet",   cls:"cloud", desc:"Dos proveedores redundantes con enlace de 1 Gbps cada uno y conmutación automática." },
+  nube:     { x:570, y:46,  kind:"cloud", t:"Nube pública",     cls:"cloud", desc:"Workspaces y respaldo con IaaS; acceso cifrado por túnel IPSec." },
+  fw:       { x:250, y:118, kind:"fw",   t:"Firewall UTM (perímetro)", cls:"fw", desc:"Inspección estadoful, IPS con firma, filtrado antimalware y terminación de sitio a sitio." },
+  vpn:      { x:430, y:118, kind:"fw",   t:"Concentrador VPN",  cls:"fw", desc:"Termina túneles IPSec/IKEv2 para teletrabajo y enlaza la sucursal." },
+  router:   { x:250, y:196, kind:"rt",   t:"Router borde (L3)",  cls:"rt", desc:"OSPF con BFD, políticas de QoS y balanceo hacia ambos proveedores." },
+  core:     { x:570, y:196, kind:"sw",   t:"Switch núcleo L3",   cls:"sw", desc:"Par redundante a 10 GbE; funciones de gateway para todos los segmentos." },
+  dmz:      { x:150, y:286, kind:"srv",  t:"DMZ (servidores publicados)", cls:"srv", desc:"Web pública y correo tras reverse-proxy; aislada del segmento de usuarios." },
+  srv:      { x:330, y:286, kind:"srv",  t:"Servidores internos", cls:"srv", desc:"AD, ERP y SIEM; solo accesibles por la red de gestión." },
+  mon:      { x:570, y:286, kind:"srv",  t:"Monitoreo (NOC)",   cls:"srv", desc:"Grafana, Prometheus y Syslog centralizados; tráfico de gestión independiente." },
+  distA:    { x:150, y:372, kind:"sw",   t:"Distribución A",    cls:"sw", desc:"Agrega los segmentos cableados del campus norte." },
+  distB:    { x:430, y:372, kind:"sw",   t:"Distribución B",    cls:"sw", desc:"Agrega segmentos IoT y Wi-Fi con aislamiento 802.1Q." },
+  vClient:  { x:90,  y:460, kind:"leaf", t:"VLAN Clientes",     cls:"leaf", desc:"Usuarios corporativos (10.30.0.0/24) con NAC y control de acceso por puerto." },
+  vInv:     { x:226, y:460, kind:"leaf", t:"VLAN Invitados",    cls:"leaf", desc:"Acceso aislado solo a internet (10.31.0.0/24), limitado y con portal cautivo." },
+  vIoT:     { x:362, y:460, kind:"leaf", t:"VLAN IoT / cámaras",cls:"leaf", desc:"Segmento M2M (10.33.0.0/24) con inspección de protocolos e IoT firewall." },
+  vWap:     { x:498, y:460, kind:"leaf", t:"VLAN Wi-Fi",        cls:"leaf", desc:"Puntos de acceso (10.34.0.0/24) con roaming 802.11r y band-steering." },
+  suc:      { x:656, y:460, kind:"leaf", t:"Sucursal remota",   cls:"leaf", desc:"Sitio remoto conectado por túnel IPSec sitio-a-sitio (línea violeta) al concentrador VPN." }
+};
+
+const EDGES = [
+  ["wan","fw","g"], ["nube","vpn","g"],
+  ["fw","router","g"], ["vpn","core","v"],
+  ["router","core","g"], ["router","dmz","o"], ["router","srv","o"], ["core","mon","o"],
+  ["router","distA","g"], ["core","distB","g"],
+  ["distA","vClient","g"], ["distA","vInv","g"],
+  ["distB","vIoT","g"], ["distB","vWap","g"], ["vpn","suc","v"]
+];
+
+const edgesEl = document.getElementById("edges");
+const nodesEl = document.getElementById("nodes");
+
+EDGES.forEach(([a,b,cls]) => {
+  const A = TOPO[a], B = TOPO[b];
+  const path = document.createElementNS("http://www.w3.org/2000/svg","line");
+  path.setAttribute("x1", A.x); path.setAttribute("y1", A.y);
+  path.setAttribute("x2", B.x); path.setAttribute("y2", B.y);
+  path.setAttribute("class", "linkline");
+  edgesEl.appendChild(path);
+  const flow = document.createElementNS("http://www.w3.org/2000/svg","line");
+  flow.setAttribute("x1", A.x); flow.setAttribute("y1", A.y);
+  flow.setAttribute("x2", B.x); flow.setAttribute("y2", B.y);
+  flow.setAttribute("class", "flow " + (cls==="o"?"o":cls==="v"?"v":""));
+  edgesEl.appendChild(flow);
+});
+
+Object.entries(TOPO).forEach(([id, n]) => {
+  const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+  g.setAttribute("class","node");
+  g.setAttribute("tabindex","0");
+  g.setAttribute("role","button");
+  g.setAttribute("aria-label", n.t);
+  g.dataset.id = id;
+  let shapeW = 148, m = 10;
+  const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+  if (n.kind === "cloud") {
+    const el = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+    el.setAttribute("cx", n.x); el.setAttribute("cy", n.y);
+    el.setAttribute("rx", 60); el.setAttribute("ry", 24);
+    el.setAttribute("class","shape cloud");
+    g.appendChild(el); shapeW = 120; m = 0;
+  } else {
+    rect.setAttribute("x", n.x - shapeW/2); rect.setAttribute("y", n.y - 14);
+    rect.setAttribute("width", shapeW); rect.setAttribute("height", 28);
+    rect.setAttribute("rx", n.kind==="leaf"?14:7);
+    rect.setAttribute("class","shape " + n.cls);
+    g.appendChild(rect);
+  }
+  const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+  t.setAttribute("x", n.x); t.setAttribute("y", n.y + 4);
+  t.setAttribute("text-anchor","middle");
+  t.textContent = n.t;
+  g.appendChild(t);
+  g.addEventListener("click", () => selectNode(id, g));
+  g.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); selectNode(id, g); } });
+  nodesEl.appendChild(g);
+});
+
+function selectNode(id, g) {
+  nodesEl.querySelectorAll(".node.sel").forEach(x => x.classList.remove("sel"));
+  g.classList.add("sel");
+  const n = TOPO[id];
+  document.getElementById("topoInfo").innerHTML =
+    "<b>" + n.t + "</b> &nbsp;<span style='color:var(--muted)'>(" + id + ")</span><br>" + n.desc;
+  g.scrollIntoView({ behavior:"smooth", block:"nearest" });
+}
+
+/* =============== PANEL DE MONITOREO =============== */
+const chart = document.getElementById("chart");
+const ctx = chart.getContext("2d");
+let W = chart.width = chart.clientWidth * (window.devicePixelRatio || 1);
+let H = chart.height = 230 * (window.devicePixelRatio || 1);
+chart.style.height = "230px";
+let series = Array(60).fill(220);
+let t0 = performance.now();
+
+const $id = x => document.getElementById(x);
+const fmt = (v,d) => v.toFixed(d);
+
+function tick() {
+  const t = performance.now() - t0;
+  series.push(180 + 120*Math.random() + 70*Math.sin(t/3000) + 35*Math.sin(t/8200));
+  series.shift();
+  draw();
+  const lat = 10 + Math.random()*14, jit = 1 + Math.random()*5, loss = Math.random()*0.4;
+  $id("lat").textContent = fmt(lat,0);
+  $id("jit").textContent = fmt(jit,1);
+  $id("loss").textContent = fmt(loss,1);
+  $id("lat").style.color = lat>100?"var(--red)":lat>50?"var(--amber)":"var(--cyan)";
+  $id("up").textContent = fmt(99.9 + Math.random()*0.09, 2);
+  $id("latS").textContent = lat>50 ? "> 50ms" : "< 24ms";
+}
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle = "#26313f"; ctx.lineWidth = 1;
+  for (let i=1;i<4;i++){ ctx.beginPath(); ctx.moveTo(0,H*i/4); ctx.lineTo(W,H*i/4); ctx.stroke(); }
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,"rgba(34,211,238,.35)"); grad.addColorStop(1,"rgba(34,211,238,0)");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  series.forEach((v,i) => { const x = i/(series.length-1)*W, y = H - (v/400)*H; i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#22d3ee"; ctx.lineWidth = 2;
+  ctx.beginPath();
+  series.forEach((v,i) => { const x = i/(series.length-1)*W, y = H - (v/400)*H; i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+  ctx.stroke();
+  ctx.fillStyle = "#e6edf3"; ctx.font = "600 12px 'Segoe UI', system-ui, sans-serif";
+  ctx.fillText(((series[series.length-1])).toFixed(0) + " Mbps", 10, 22);
+}
+setInterval(tick, 1000); tick();
+
+/* =============== ZERO TRUST =============== */
+const ztd = document.getElementById("ztd");
+const bar = document.getElementById("ztbar");
+const pct = document.getElementById("ztpct");
+const items = [...ztd.querySelectorAll(".item")];
+function refreshZT() {
+  const on = items.filter(i => i.classList.contains("on")).length;
+  const p = Math.round(on/items.length*100);
+  bar.style.width = p + "%";
+  pct.textContent = p + "%";
+}
+items.forEach(item => {
+  item.addEventListener("click", () => { item.classList.toggle("on"); refreshZT(); });
+});
+refreshZT();
+
+/* =============== TENDENCIAS / FILTROS =============== */
+const filters = document.getElementById("filters");
+const trends = [...document.querySelectorAll(".trend")];
+filters.addEventListener("click", e => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  filters.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === btn));
+  const f = btn.dataset.f;
+  trends.forEach(t => t.style.display = (f==="todas" || t.dataset.stage===f) ? "" : "none");
+});
+
+/* =============== RESIZE + ESTADO DE RED + PWA =============== */
+function fit() {
+  W = chart.width = chart.clientWidth * (window.devicePixelRatio || 1);
+  H = chart.height = 230 * (window.devicePixelRatio || 1);
+  draw();
+}
+window.addEventListener("resize", fit);
+
+const net = document.getElementById("netState");
+function paintNet() {
+  const on = navigator.onLine;
+  net.classList.toggle("on", on);
+  net.classList.toggle("off", !on);
+  net.textContent = on ? "● En línea" : "○ Sin conexión";
+}
+addEventListener("online", paintNet);
+addEventListener("offline", paintNet);
+paintNet();
+
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
